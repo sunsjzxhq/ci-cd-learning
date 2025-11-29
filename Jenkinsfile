@@ -8,16 +8,24 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Setup Python Env') {
             steps {
-                sh 'python3 --version'
-                sh 'pip3 install -r requirements.txt'
+                sh '''
+                    echo "Creating virtual environment..."
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'pytest -q --junitxml=test-results.xml'
+                sh '''
+                    . venv/bin/activate
+                    pytest -q --junitxml=test-results.xml
+                '''
             }
         }
     }
