@@ -24,6 +24,7 @@ pipeline {
             steps {
                 sh '''
                     . venv/bin/activate
+		    export PYTHONPATH=/var/jenkins_home/workspace/python-ci/
                     pytest -q --junitxml=test-results.xml
                 '''
             }
