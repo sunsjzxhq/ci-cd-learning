@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.9.25-slim'
+        }
+    }
 
     stages {
         stage('Checkout') {
@@ -17,14 +21,14 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh 'pytest -q'
+                sh 'pytest -q --junitxml=test-results.xml'
             }
         }
     }
 
     post {
         always {
-            junit '**/pytest.xml'
+            junit 'test-results.xml'
         }
     }
 }
